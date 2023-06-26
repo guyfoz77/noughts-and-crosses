@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    border: solid black;
+}
+body {
+    background-color: rgb(0, 241, 241);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+.content {
+    flex: 1;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.mainContainer {
+    width: min(85%, 400px);
+    height: 400px;
+}
+
+footer {
+    height: 20px;
+    background-color: blueviolet;
+}
