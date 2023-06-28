@@ -7,7 +7,7 @@ let gameController = (function() {
      ['x', 'x', 'o',
      'o', 'x', 'o',
      'x', 'o', 'x'];
-
+     let playerTurn = 0;
      let players = [player('X'), player('O')];
 
      const clickDetector = () =>{
@@ -19,8 +19,14 @@ let gameController = (function() {
             })
         })
      }
+     const whosTurn = () =>{
+        let playerWhosTurn = players[playerTurn];
+        (playerTurn >= players.length-1) ? playerTurn = 0 : playerTurn++;
+        console.log(playerTurn);
+        return playerWhosTurn;
+     }
      const playPositionsUpdater = (clickPosition) => {
-        let counter = 'X';
+        let counter = whosTurn().counter;
         playPositions[clickPosition] = counter;
         displayController.updateDisplay();
      }
