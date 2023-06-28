@@ -1,3 +1,32 @@
+let player = function(counter) {
+    return {counter};
+}
+
+let gameController = (function() {
+    let playPositions = 
+     ['x', 'x', 'o',
+     'o', 'x', 'o',
+     'x', 'o', 'x'];
+
+     let players = [player('X'), player('O')];
+
+     const clickDetector = () =>{
+        const segments = document.querySelectorAll('.segment');
+        segments.forEach(segment => {
+            segment.addEventListener('click', (e) => {
+                playPositionsUpdater(e.target.dataset.key);
+                // return e.target.dataset.key;
+            })
+        })
+     }
+     const playPositionsUpdater = (clickPosition) => {
+        let counter = 'X';
+        playPositions[clickPosition] = counter;
+        displayController.updateDisplay();
+     }
+     return {playPositions, clickDetector};
+})();
+
 let displayController = (function() {
     const gameContainer = document.querySelector('.gameContainer');
     const divMaker = (content, i) => {
@@ -23,29 +52,6 @@ let displayController = (function() {
         gameController.clickDetector();
     }
     return{updateDisplay};
-})();
-
-let gameController = (function() {
-    let playPositions = 
-     ['x', 'x', 'o',
-     'o', 'x', 'o',
-     'x', 'o', 'x'];
-
-     const clickDetector = () =>{
-        const segments = document.querySelectorAll('.segment');
-        segments.forEach(segment => {
-            segment.addEventListener('click', (e) => {
-                playPositionsUpdater(e.target.dataset.key);
-                // return e.target.dataset.key;
-            })
-        })
-     }
-     const playPositionsUpdater = (clickPosition) => {
-        let counter = 'X';
-        playPositions[clickPosition] = counter;
-        displayController.updateDisplay();
-     }
-     return {playPositions, clickDetector};
 })();
 
 
