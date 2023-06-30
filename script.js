@@ -1,5 +1,8 @@
+//pre load the divs in the game board, loop through each player array adding their counters into the board.
+//after each turn, check each player against an array of all possible victory positions.
 let player = function(counter) {
-    return {counter};
+    positions = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    return {counter, positions};
 }
 
 let gameController = (function() {
@@ -19,7 +22,8 @@ let gameController = (function() {
             })
         })
      }
-     const whosTurn = () =>{
+     const whosTurn = () => {
+        console.log(playerTurn);
         let playerWhosTurn = players[playerTurn];
         (playerTurn >= players.length-1) ? playerTurn = 0 : playerTurn++;
         console.log(playerTurn);
@@ -27,34 +31,31 @@ let gameController = (function() {
      }
      const playPositionsUpdater = (clickPosition) => {
         let counter = whosTurn().counter;
-        playPositions[clickPosition] = counter;
+        players[playerTurn].positions[clickPosition] = 1;
         displayController.updateDisplay();
      }
-     return {playPositions, clickDetector};
+     return {playPositions, clickDetector, whosTurn};
 })();
 
 let displayController = (function() {
     const gameContainer = document.querySelector('.gameContainer');
-    const divMaker = (content, i) => {
-        let newDiv = document.createElement('div');
-        newDiv.textContent = content;
-        newDiv.classList.add('segment');
-        newDiv.dataset.key = i;
-        return newDiv;
+    const segments = document.querySelectorAll('.segment');
+    const divWriter = (player) => {
+        i = 0;
+        segments.forEach(segment => {
+            console.log(player);
+            if (player.positions[i] == 1) {
+                segment.textContent = player.counter;
+            }
+            i++;
+        })
     }
     const divAdder = (div) => {
         gameContainer.appendChild(div);
     }
-    const divRemover = () => {
-        gameContainer.textContent = '';
-    }
+    
     const updateDisplay = () => {
-        let i = 0;
-        divRemover();
-        gameController.playPositions.forEach(position => {
-            divAdder(divMaker(position, i));
-            i++;
-        });
+        divWriter(gameController.whosTurn());
         gameController.clickDetector();
     }
     return{updateDisplay};
