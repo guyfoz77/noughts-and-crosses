@@ -17,20 +17,24 @@ let gameController = (function() {
         const segments = document.querySelectorAll('.segment');
         segments.forEach(segment => {
             segment.addEventListener('click', (e) => {
-                playPositionsUpdater(e.target.dataset.key);
+                let spaceOccupied = false;
+                players.forEach(player => {
+                    console.log(player.positions[e.target.dataset.key]);
+                    if (player.positions[e.target.dataset.key] == 1) spaceOccupied = true;
+                })
+                if (spaceOccupied == false) playPositionsUpdater(e.target.dataset.key);
                 // return e.target.dataset.key;
             })
         })
      }
      const whosTurn = () => {
-        console.log(playerTurn);
+        // console.log(playerTurn);
         let playerWhosTurn = players[playerTurn];
         (playerTurn >= players.length-1) ? playerTurn = 0 : playerTurn++;
-        console.log(playerTurn);
+        // console.log(playerTurn);
         return playerWhosTurn;
      }
      const playPositionsUpdater = (clickPosition) => {
-        let counter = whosTurn().counter;
         players[playerTurn].positions[clickPosition] = 1;
         displayController.updateDisplay();
      }
@@ -38,31 +42,24 @@ let gameController = (function() {
 })();
 
 let displayController = (function() {
-    const gameContainer = document.querySelector('.gameContainer');
     const segments = document.querySelectorAll('.segment');
     const divWriter = (player) => {
         i = 0;
         segments.forEach(segment => {
-            console.log(player);
             if (player.positions[i] == 1) {
                 segment.textContent = player.counter;
             }
             i++;
         })
     }
-    const divAdder = (div) => {
-        gameContainer.appendChild(div);
-    }
     
     const updateDisplay = () => {
         divWriter(gameController.whosTurn());
-        gameController.clickDetector();
     }
     return{updateDisplay};
 })();
 
-
-displayController.updateDisplay();
+gameController.clickDetector();
 
 
 
