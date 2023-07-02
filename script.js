@@ -35,7 +35,7 @@ let gameController = (function() {
          1, 0, 0]
     ]
 
-    const clickDetector = () =>{  //this function basically initialises everything.
+    const clickDetector = () => {  //this function basically initialises everything.
        const segments = document.querySelectorAll('.segment');
        const resetButton = document.querySelector('button');
        resetButton.addEventListener('click', () => location.reload());
@@ -47,12 +47,18 @@ let gameController = (function() {
                    if (player.positions[e.target.dataset.key] == 1) spaceOccupied = true;
                })
                if (spaceOccupied == false){
-                    playPositionsUpdater(e.target.dataset.key);
-                    victoryChecker();
-                    turnNumber++;
+                    moveMaker(e.target.dataset.key);
                }
            })
        })
+    }
+    const moveMaker = (boardPosition) => {
+        playPositionsUpdater(boardPosition);
+        victoryChecker();
+        turnNumber++;
+    }
+    const AI = () => {
+
     }
     const victoryChecker = () => (
         winningPositions.forEach(positionMap => {
