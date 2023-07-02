@@ -48,6 +48,7 @@ let gameController = (function() {
                })
                if (spaceOccupied == false){
                     moveMaker(e.target.dataset.key);
+                    AI();
                }
            })
        })
@@ -57,8 +58,17 @@ let gameController = (function() {
         victoryChecker();
         turnNumber++;
     }
-    const AI = () => {
-
+    const AI = () => { 
+        let move
+        if (turnNumber == 10) return;
+        while(playerTurn == 1){
+            let play = true;
+            move = Math.floor((Math.random() * 9));
+            players.forEach(player => {
+                if (player.positions[move] == 1) play = false;
+            })
+            if (play == true) moveMaker(move);
+        }
     }
     const victoryChecker = () => (
         winningPositions.forEach(positionMap => {
