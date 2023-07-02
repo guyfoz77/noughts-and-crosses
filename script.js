@@ -73,6 +73,7 @@ let gameController = (function() {
     }
     const playPositionsUpdater = (clickPosition) => {
        players[playerTurn].positions[clickPosition] = 1;
+       victoryChecker();
        displayController.updateDisplay();
     }
     return {clickDetector, whosTurn};
