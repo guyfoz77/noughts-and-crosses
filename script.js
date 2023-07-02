@@ -35,8 +35,10 @@ let gameController = (function() {
          1, 0, 0]
     ]
 
-    const clickDetector = () =>{
+    const clickDetector = () =>{  //this function basically initialises everything.
        const segments = document.querySelectorAll('.segment');
+       const resetButton = document.querySelector('button');
+       resetButton.addEventListener('click', () => location.reload());
        segments.forEach(segment => {
            segment.addEventListener('click', (e) => {
                let spaceOccupied = false;
@@ -60,6 +62,10 @@ let gameController = (function() {
                 if (positionMap[i] == players[playerTurn].positions[i]) matches++;
                 if (matches == 3) {
                     display.textContent = `${players[playerTurn].counter} victory!`;
+                    continue
+                }
+                if (turnNumber == 9) {
+                    display.textContent = 'Draw!';
                 }
             }
         })

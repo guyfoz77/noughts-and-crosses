@@ -30,7 +30,7 @@ body {
 }
 .mainContainer {
     width: min(85%, 400px);
-    height: 400px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,7 +47,7 @@ body {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
+            font-size: 4rem;
         }
         .segment:nth-child(-n+3) {
             border-bottom: solid var(--gameBoardLineColour);
@@ -61,14 +61,32 @@ body {
         }
         
     .display {
-        width: 90%;
-        flex: auto;
-        font-size: 3rem;
         display: flex;
         justify-content: center;
         align-items: center;
         font-style: normal;
+        width: 90%;
+        flex: 2;
+        font-size: 2rem;
     }
+    .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-style: normal;
+        width: 90%;
+        font-size: 2rem;
+        flex: 1;
+    }
+        button {
+            height: 90%;
+            width: 50%;
+            font-size: 1.5rem;
+            border-radius: 100px;
+        }
+        button:active {
+            border: inset 3px black;
+        }
 
 footer {
     height: 20px;
