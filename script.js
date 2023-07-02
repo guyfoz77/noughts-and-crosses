@@ -7,7 +7,8 @@ let gameController = (function() {
     let turnNumber = 1;
     let playerTurn = 0;
     let players = [player('X'), player('O')];
-    let winningPositions = [
+    const display = document.querySelector('.display');
+    const winningPositions = [
         [1, 1, 1,
          0, 0, 0,
          0, 0, 0],
@@ -45,10 +46,9 @@ let gameController = (function() {
                })
                if (spaceOccupied == false){
                     playPositionsUpdater(e.target.dataset.key);
-                    victoryChecker(); //currently this fires when victory happens but only on the turn after victory occurs...
+                    victoryChecker();
                     turnNumber++;
                }
-               // return e.target.dataset.key;
            })
        })
     }
@@ -59,7 +59,7 @@ let gameController = (function() {
                 if (positionMap[i] == 0) continue;
                 if (positionMap[i] == players[playerTurn].positions[i]) matches++;
                 if (matches == 3) {
-                    console.log(`${players[playerTurn].counter} victory!`);
+                    display.textContent = `${players[playerTurn].counter} victory!`;
                 }
             }
         })

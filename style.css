@@ -6,6 +6,9 @@
     margin: 0;
     border: solid black;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-style: italic;
 }
 .segment, .gameContainer {
     border: none;
@@ -31,6 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 5px 0;
 }
     .gameContainer {
         width: 90%;
@@ -56,7 +60,15 @@ body {
             border-right: solid var(--gameBoardLineColour);
         }
         
-        
+    .display {
+        width: 90%;
+        flex: auto;
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-style: normal;
+    }
 
 footer {
     height: 20px;
