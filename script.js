@@ -3,9 +3,12 @@ let player = function(counter) {
     return {counter, positions};
 }
 
+// Stop player from being able to make moves when gameover.
+
 let gameController = (function() {
     let turnNumber = 1;
     let playerTurn = 0;
+    let gameOver = false;
     let players = [player('X'), player('O')];
     const display = document.querySelector('.display');
     const winningPositions = [
@@ -46,9 +49,9 @@ let gameController = (function() {
                    console.log(player.positions[e.target.dataset.key]);
                    if (player.positions[e.target.dataset.key] == 1) spaceOccupied = true;
                })
-               if (spaceOccupied == false){
+               if (spaceOccupied == false && !gameOver){
                     moveMaker(e.target.dataset.key);
-                    AI();
+                    if (!gameOver) setTimeout(AI, 300); //AI is the function which makes the computers move.
                }
            })
        })
@@ -78,9 +81,11 @@ let gameController = (function() {
                 if (positionMap[i] == players[playerTurn].positions[i]) matches++;
                 if (matches == 3) {
                     display.textContent = `${players[playerTurn].counter} victory!`;
+                    gameOver = true;
                     continue
                 }
                 if (turnNumber == 9) {
+                    gameOver = true;
                     display.textContent = 'Draw!';
                 }
             }
