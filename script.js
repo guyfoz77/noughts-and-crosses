@@ -102,7 +102,7 @@ let gameController = (function() {
        victoryChecker();
        displayController.updateDisplay();
     }
-    return {clickDetector, whosTurn};
+    return {clickDetector, whosTurn, players};
 })();
 
 let displayController = (function() {
@@ -120,6 +120,20 @@ let displayController = (function() {
         divWriter(gameController.whosTurn());
     }
     return{updateDisplay};
+})();
+
+let aiController = (function() {
+    let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+    const getCurrentBoardState = () => {
+        for (let i = 0; i < gameController.players.length; i++){
+            for (let j = 0; j < board.length; j++){
+                if (gameController.players[i].positions[j] == 1) board[j] = gameController.players[i].counter;
+            }
+        }
+    }
+
+    return{board, getCurrentBoardState};
 })();
 
 gameController.clickDetector();
