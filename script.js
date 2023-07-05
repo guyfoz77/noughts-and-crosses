@@ -102,7 +102,7 @@ let gameController = (function() {
        victoryChecker();
        displayController.updateDisplay();
     }
-    return {clickDetector, whosTurn, players};
+    return {clickDetector, whosTurn, playerTurn, players};
 })();
 
 let displayController = (function() {
@@ -138,10 +138,21 @@ let aiController = (function() {
     }
     const getPossibleNextPlays = () => {
         let possibleNextPlays = [];
+        let possibleNextPositions = [];
         board.forEach(position => {
             if (typeof position == 'number') possibleNextPlays.push(position);
         })
-        return possibleNextPlays;
+        possibleNextPlays.forEach(play => {
+            let possibleNextPosition = [];
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] == gameController.players[gameController.playerTurn].counter) {
+                    possibleNextPosition[i] = 1;
+                } else possibleNextPosition[i] = 0;
+            }
+            possibleNextPosition[play] = 1; 
+            possibleNextPositions.push(possibleNextPosition);
+        });
+        return {possibleNextPlays, possibleNextPositions};
     }
 
     return{board, getCurrentBoardState, getPossibleNextPlays};
