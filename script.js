@@ -82,9 +82,8 @@ let gameController = (function() {
                 if (matches == 3) {
                     display.textContent = `${players[playerTurn].counter} victory!`;
                     gameOver = true;
-                    continue
                 }
-                if (turnNumber == 9) {
+                if (turnNumber == 9 && !gameOver) {
                     gameOver = true;
                     display.textContent = 'Draw!';
                 }
