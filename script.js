@@ -58,7 +58,6 @@ let gameController = (function() {
     }
     const moveMaker = (boardPosition) => {
         playPositionsUpdater(boardPosition);
-        victoryChecker();
         turnNumber++;
     }
     const AI = () => { 
@@ -73,23 +72,34 @@ let gameController = (function() {
             if (play == true) moveMaker(move);
         }
     }
-    const victoryChecker = () => (
+    const victoryChecker = () => {
+        let gamestate = '';
         winningPositions.forEach(positionMap => {
             let matches = 0;
             for (let i = 0; i < positionMap.length; i++) {
                 if (positionMap[i] == 0) continue;
                 if (positionMap[i] == players[playerTurn].positions[i]) matches++;
                 if (matches == 3) {
-                    display.textContent = `${players[playerTurn].counter} victory!`;
-                    gameOver = true;
+                    gamestate = 'win';
+                    return gamestate;
                 }
                 if (turnNumber == 9 && !gameOver) {
-                    gameOver = true;
-                    display.textContent = 'Draw!';
+                    gamestate = 'draw'
                 }
             }
         })
-    )
+        return gamestate;
+    }
+    const victoryTextUpdater = () => {
+        console.log(victoryChecker());
+        if (victoryChecker() == 'win') {
+            gameOver = true;
+            display.textContent = `${players[playerTurn].counter} victory!`;
+        } else if (victoryChecker() == 'draw') {
+            gameOver = true;
+            display.textContent = `It's a draw.`
+        }
+    }
     const whosTurn = () => {
        // console.log(playerTurn);
        let playerWhosTurn = players[playerTurn];
@@ -99,7 +109,7 @@ let gameController = (function() {
     }
     const playPositionsUpdater = (clickPosition) => {
        players[playerTurn].positions[clickPosition] = 1;
-       victoryChecker();
+       victoryTextUpdater();
        displayController.updateDisplay();
     }
     return {clickDetector, whosTurn, playerTurn, players};
@@ -125,6 +135,11 @@ let displayController = (function() {
 let aiController = (function() {
     let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     let freePositions = 0;
+    let tempTurn = gameController.playerTurn;
+
+    const tempTurnChanger = () => {
+        (tempTurn >= gameController.players.length-1) ? tempTurn = 0 : tempTurn++;
+    }
 
     const getCurrentBoardState = () => {
         for (let i = 0; i < gameController.players.length; i++){
@@ -137,15 +152,15 @@ let aiController = (function() {
         })
     }
     const getPossibleNextPlays = () => {
-        let possibleNextPlays = [];
-        let possibleNextPositions = [];
+        let possibleNextPlays = []; //a list of future positions that can be played.
+        let possibleNextPositions = []; //an array of future board positions (array of array).
         board.forEach(position => {
             if (typeof position == 'number') possibleNextPlays.push(position);
         })
         possibleNextPlays.forEach(play => {
             let possibleNextPosition = [];
             for (let i = 0; i < board.length; i++) {
-                if (board[i] == gameController.players[gameController.playerTurn].counter) {
+                if (board[i] == gameController.players[tempTurn].counter) {
                     possibleNextPosition[i] = 1;
                 } else possibleNextPosition[i] = 0;
             }
