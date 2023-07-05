@@ -124,6 +124,7 @@ let displayController = (function() {
 
 let aiController = (function() {
     let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    let freePositions = 0;
 
     const getCurrentBoardState = () => {
         for (let i = 0; i < gameController.players.length; i++){
@@ -131,9 +132,19 @@ let aiController = (function() {
                 if (gameController.players[i].positions[j] == 1) board[j] = gameController.players[i].counter;
             }
         }
+        board.forEach(position => {
+            if (typeof position == 'number') freePositions++;
+        })
+    }
+    const getPossibleNextPlays = () => {
+        let possibleNextPlays = [];
+        board.forEach(position => {
+            if (typeof position == 'number') possibleNextPlays.push(position);
+        })
+        return possibleNextPlays;
     }
 
-    return{board, getCurrentBoardState};
+    return{board, getCurrentBoardState, getPossibleNextPlays};
 })();
 
 gameController.clickDetector();
