@@ -144,8 +144,10 @@ let displayController = (function() {
 
 let aiController = (function() {  
     let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    let xTempBoard = gameController.players[0].positions;
+    let oTempBoard = gameController.players[1].positions;
     let freePositions = 0;
-    let tempTurn = 1;
+    let tempTurn = 1; //1 = AI turn, 0 = user turn
 
     const tempTurnChanger = () => {
         (tempTurn >= gameController.players.length-1) ? tempTurn = 0 : tempTurn++;
@@ -186,13 +188,53 @@ let aiController = (function() {
         let moveToPlay;
         // console.log(possibleNextPositions);
         possibleNextPositions.possibleNextPositions.forEach(position => {
+            
+
             if (gameController.victoryChecker(position.possibleNextPosition) == 'win') {
                 console.log(`winning move detected ${position.play}`);
                 moveToPlay = position.play;
             }
         });
+
         return moveToPlay;
     }
+
+    const miniMax = (board, maximising) => {
+        if(gameController.victoryChecker(board) == 'win' && maximising) {
+            return 10;
+        }
+        if(gameController.victoryChecker(board) == 'win' && !maximising){
+            return -10;
+        }
+        if(gameController.victoryChecker(board) == 'draw') {
+            return 0;
+        }
+        if (maximising) { //maximising score
+            let bestScore = -Infinity;
+            for (let i = 0; i < 8; i++) {
+                if (typeof board[i] == 'number') {
+                    board[i] = 'O';
+                    oTempBoard[i] = 1;
+                    let score = miniMax(board, false);
+                    oTempBoard = gameController.players[0].positions;
+                    return Math.max(score, bestScore);
+                }
+            }
+        }
+        if (!maximising) { //minimising score
+            let bestScore = Infinity;
+            for (let i = 0; i < 8; i++) {
+                if (typeof board[i] == 'number') {
+                    board[i] = 'X';
+                    xTempBoard[i] = 1;
+                    let score = miniMax(board, true);
+                    xTempBoard = gameController.players[1].positions;
+                    return Math.max(score, bestScore);
+                }
+            }
+        }
+    }
+    
 
     const AI = () => {
         getCurrentBoardState();
