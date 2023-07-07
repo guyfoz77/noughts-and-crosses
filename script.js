@@ -69,7 +69,12 @@ let gameController = (function() {
             players.forEach(player => {
                 if (player.positions[move] == 1) play = false;
             })
-            if (play == true) moveMaker(move);
+            if (play == true) {
+                let nextMove = aiController.AI();
+                if (typeof nextMove == 'number') move = nextMove;
+                moveMaker(move);
+                
+            }
         }
     }
     const victoryChecker = (positionsToCheck) => { //theres an issue where 'sometimes' if a winning move is played as the last move, it triggers a draw.
@@ -83,7 +88,6 @@ let gameController = (function() {
                 if (matches == 3) {
                     gamestate = 'win';
                     gameOver = true;
-                    console.log('winb')
                     break;
                 }
                 
@@ -91,7 +95,6 @@ let gameController = (function() {
         })
         if (turnNumber == 9 && !gameOver) { //draw check
             gamestate = 'draw';
-            console.log('drawb');
         }
         return gamestate;
     }
@@ -137,10 +140,12 @@ let displayController = (function() {
     return{updateDisplay};
 })();
 
-let aiController = (function() {
+//###########################
+
+let aiController = (function() {  
     let board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     let freePositions = 0;
-    let tempTurn = gameController.playerTurn;
+    let tempTurn = 1;
 
     const tempTurnChanger = () => {
         (tempTurn >= gameController.players.length-1) ? tempTurn = 0 : tempTurn++;
@@ -172,18 +177,29 @@ let aiController = (function() {
             possibleNextPosition[play] = 1; 
             possibleNextPositions.push({play, possibleNextPosition});
         });
-    const moveMaker = () => {
-        possibleNextPositions.forEach(position => {
+        return {possibleNextPlays, possibleNextPositions};
+    }
+    
+    
+    const moveChecker = () => {    //this checks the possibleNextPositions for a winning position.
+        let possibleNextPositions = getPossibleNextPlays();
+        let moveToPlay;
+        // console.log(possibleNextPositions);
+        possibleNextPositions.possibleNextPositions.forEach(position => {
             if (gameController.victoryChecker(position.possibleNextPosition) == 'win') {
                 console.log(`winning move detected ${position.play}`);
+                moveToPlay = position.play;
             }
         });
+        return moveToPlay;
     }
 
-    return {possibleNextPlays, possibleNextPositions};
+    const AI = () => {
+        getCurrentBoardState();
+        return moveChecker();
     }
 
-    return{board, getCurrentBoardState, getPossibleNextPlays};
+    return{board, getCurrentBoardState, getPossibleNextPlays, AI};
 })();
 
 gameController.clickDetector();
