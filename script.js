@@ -72,32 +72,37 @@ let gameController = (function() {
             if (play == true) moveMaker(move);
         }
     }
-    const victoryChecker = () => {
+    const victoryChecker = (positionsToCheck) => { //theres an issue where 'sometimes' if a winning move is played as the last move, it triggers a draw.
         let gamestate = '';
+        let gameOver = 'false'; //local variable since global is not updated until after the function is run. This caused a bug where the draw check would always be called on turn 9, regardless of if a winning position was identified.
         winningPositions.forEach(positionMap => {
             let matches = 0;
             for (let i = 0; i < positionMap.length; i++) {
                 if (positionMap[i] == 0) continue;
-                if (positionMap[i] == players[playerTurn].positions[i]) matches++;
+                if (positionMap[i] == positionsToCheck[i]) matches++;
                 if (matches == 3) {
                     gamestate = 'win';
-                    return gamestate;
+                    gameOver = true;
+                    console.log('winb')
+                    break;
                 }
-                if (turnNumber == 9 && !gameOver) {
-                    gamestate = 'draw'
-                }
+                
             }
         })
+        if (turnNumber == 9 && !gameOver) { //draw check
+            gamestate = 'draw';
+            console.log('drawb');
+        }
         return gamestate;
     }
     const victoryTextUpdater = () => {
-        console.log(victoryChecker());
-        if (victoryChecker() == 'win') {
+        let victoryCheckerOutput = victoryChecker(players[playerTurn].positions);
+        if (victoryCheckerOutput == 'win') {
             gameOver = true;
             display.textContent = `${players[playerTurn].counter} victory!`;
-        } else if (victoryChecker() == 'draw') {
+        } else if (victoryCheckerOutput == 'draw') {
             gameOver = true;
-            display.textContent = `It's a draw.`
+            display.textContent = `It's a draw.`;
         }
     }
     const whosTurn = () => {
@@ -112,7 +117,7 @@ let gameController = (function() {
        victoryTextUpdater();
        displayController.updateDisplay();
     }
-    return {clickDetector, whosTurn, playerTurn, players};
+    return {clickDetector, whosTurn, playerTurn, players, victoryChecker};
 })();
 
 let displayController = (function() {
@@ -165,9 +170,17 @@ let aiController = (function() {
                 } else possibleNextPosition[i] = 0;
             }
             possibleNextPosition[play] = 1; 
-            possibleNextPositions.push(possibleNextPosition);
+            possibleNextPositions.push({play, possibleNextPosition});
         });
-        return {possibleNextPlays, possibleNextPositions};
+    const moveMaker = () => {
+        possibleNextPositions.forEach(position => {
+            if (gameController.victoryChecker(position.possibleNextPosition) == 'win') {
+                console.log(`winning move detected ${position.play}`);
+            }
+        });
+    }
+
+    return {possibleNextPlays, possibleNextPositions};
     }
 
     return{board, getCurrentBoardState, getPossibleNextPlays};
