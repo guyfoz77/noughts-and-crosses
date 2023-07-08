@@ -25,8 +25,24 @@ const gameController = (function(){
 
      const counterPlacer = (position, counter) => {
         board[position] = counter;
+        console.log(victoryChecker(board));
         displayController.divWriter(board);
      }
+
+     const victoryChecker = (board) => {
+        let winner = null;
+        console.log('init');
+        const checkIfEqual = (x, y, z) => {return (board[x] == board[y] && board[y] == board[z] && board[x] != '')};
+        for (let i = 0; i < 9; i += 3) { //check horizontals
+            if (checkIfEqual(i, i+1, i+2)) winner = board[i];
+        }
+        for (let i = 0; i < 3; i++) { //check verticals
+            if (checkIfEqual(i, i+3, i+6)) winner = board[i];
+        }
+        //checking diagonals
+        if (checkIfEqual(0, 4, 8) || checkIfEqual(2, 4, 6)) winner = board[4];
+        return winner;
+     };
 
      return {init};
 })();
