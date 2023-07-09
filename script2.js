@@ -78,17 +78,18 @@ let displayController = (function() {
 const AI = (function() {
 
     const moveSelector = (board) => {
-        let highestScore = -100000000;
+        let highestScore = -100;
         let move;
+        let tempBoard = board;
         for (let i = 0; i < 9; i++) {
-            if (board[i] == '') {   //check for occupied space
-                board[i] = 'O';
-                let score = miniMax(board, 0, true);
+            if (tempBoard[i] == '') {   //check for occupied space
+                tempBoard[i] = 'O';
+                let score = miniMax(tempBoard, 0, false);
                 if (score > highestScore) { //works out which move produces the highest score.
                     highestScore = score;
                     move = i;
                 }
-                board[i] = '';
+                tempBoard[i] = '';
             }
         }
         console.log(move);
@@ -97,15 +98,15 @@ const AI = (function() {
 
     const miniMax = (board, depth, isMaximising) => {
         let tempBoard = board;
-        if (gameController.victoryChecker(board) == 'O') return 10;
+        if (gameController.victoryChecker(board) == 'O') return 10; //assign +10 score to winning move, 0 to draw move, -10 to losing move.
         if (gameController.victoryChecker(board) == 'draw') return 0;
         if (gameController.victoryChecker(board) == 'X') return -10;
         
         if (isMaximising) {
-            let bestScore = -100000000;
+            let bestScore = -100;
             for (let i = 0; i < 9; i++) {
                 if (tempBoard[i] == '') {
-                    tempBoard[i] = 'X';
+                    tempBoard[i] = 'O';
                     let score = miniMax(tempBoard, depth + 1, false);
                     tempBoard[i] = '';
                     bestScore = Math.max(score, bestScore);
@@ -113,11 +114,11 @@ const AI = (function() {
             }
             return bestScore;
         }
-        if (!isMaximising){
-            let bestScore = 1000000000;
+        if (!isMaximising) {
+            let bestScore = 100;
             for (let i = 0; i < 9; i++) {
                 if (tempBoard[i] == '') {
-                    tempBoard[i] = 'O';
+                    tempBoard[i] = 'X';
                     let score = miniMax(tempBoard, depth + 1, true);
                     tempBoard[i] = ''
                     bestScore = Math.min(bestScore, score);
