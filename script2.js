@@ -80,7 +80,7 @@ const AI = (function() {
     const moveSelector = (board) => {
         let highestScore = -100;
         let move;
-        let tempBoard = board;
+        let tempBoard = board; //not sure if i really need to do this bit.
         for (let i = 0; i < 9; i++) {
             if (tempBoard[i] == '') {   //check for occupied space
                 tempBoard[i] = 'O';
@@ -89,7 +89,7 @@ const AI = (function() {
                     highestScore = score;
                     move = i;
                 }
-                tempBoard[i] = '';
+                tempBoard[i] = ''; //reset the board after each position has been tested, so the next position can be testted.
             }
         }
         console.log(move);
