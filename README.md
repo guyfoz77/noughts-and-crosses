@@ -1,6 +1,8 @@
 # noughts-and-crosses
 An unbeatable game of tic-tac-toe (or naughts and crosses, whatever you want to call it.)
 
+**Live preview: https://guyfoz77.github.io/noughts-and-crosses/**
+
 This project makes use of the minimax algorithm to select the AI moves and make it unbeatable. Read about the algorith here:
 https://en.wikipedia.org/wiki/Minimax
 
